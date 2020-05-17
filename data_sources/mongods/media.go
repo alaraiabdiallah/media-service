@@ -5,12 +5,14 @@ import (
 	"github.com/alaraiabdiallah/media-service/helpers"
 	"github.com/alaraiabdiallah/media-service/models"
 	"go.mongodb.org/mongo-driver/bson/primitive"
+	"os"
 )
 
 var mediaCollname string = "media"
 
 func getMediaUrl(media_id interface{}) string {
-	base_url := helpers.EnvGetByDefault("APP_BASE_URL","http://localhost")
+	default_port := os.Getenv("HTTP_PROT_PORT")
+	base_url := helpers.EnvGetByDefault("APP_BASE_URL","http://localhost:"+default_port)
 	id := media_id.(primitive.ObjectID).Hex()
 	return fmt.Sprintf("%v/media/%v",base_url, id)
 }

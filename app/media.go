@@ -63,3 +63,17 @@ func SaveMedia(file *multipart.FileHeader, result *models.MediaDS) error {
 	*result = file_data
 	return nil
 }
+
+func GetAllMedia(filter models.MediaFilter, results *interface{}) error {
+	if(filter.OnlyLink){
+		var medias []models.MediaLink
+		if err := ds.FindAllMediaLink(filter.Query, &medias); err != nil { return err }
+		*results = medias
+	} else {
+		var medias []models.MediaDS
+		if err := ds.FindAllMedia(filter.Query, &medias); err != nil { return err }
+		*results = medias
+	}
+
+	return nil
+}

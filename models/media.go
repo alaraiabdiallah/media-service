@@ -10,3 +10,8 @@ type MediaDS struct {
 type MediaLink struct {
 	Url 	 string `json:"url"`
 }
+
+type MediaFilter struct {
+	OnlyLink bool
+	Query interface{}
+}

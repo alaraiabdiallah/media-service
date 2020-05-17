@@ -11,11 +11,11 @@ import (
 )
 
 func GetAllMedia(c echo.Context) error {
-	var results []models.MediaLink
-	filter := echo.Map{}
-	if err := mongods.FindAllMediaLink(filter,&results); err != nil {
-		return err
-	}
+	var results interface{}
+	only_link := false
+	if par := c.QueryParam("only-link"); par == "true" {only_link = true}
+	filter := models.MediaFilter{OnlyLink: only_link, Query: echo.Map{}}
+	if err := app.GetAllMedia(filter,&results); err != nil {return err}
 	return c.JSON(http.StatusOK, echo.Map{
 		"status": true,
 		"message": "",

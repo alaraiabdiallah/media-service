@@ -13,9 +13,12 @@ func Run(){
 	e.Use(middleware.Recover())
 	e.Use(middleware.Logger())
 	routers.HttpRouters(e)
-	port := ":2807"
+	port := "2807"
 	if envport := os.Getenv("HTTP_PROT_PORT"); envport != "" {
 		port = fmt.Sprintf(":%v",envport)
+	}else{
+		os.Setenv("HTTP_PROT_PORT", port)
+		port = fmt.Sprintf(":%v",port)
 	}
 	e.Logger.Fatal(e.Start(port))
 }
