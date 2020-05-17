@@ -2,7 +2,6 @@ package handlers
 
 import (
 	"github.com/alaraiabdiallah/media-service/app"
-	"github.com/alaraiabdiallah/media-service/data_sources/mongods"
 	"github.com/alaraiabdiallah/media-service/helpers"
 	"github.com/alaraiabdiallah/media-service/models"
 	"github.com/labstack/echo"
@@ -28,9 +27,9 @@ func ShowMediaFile(c echo.Context) error {
 	media_id := c.Param("media_id")
 	id, _ :=primitive.ObjectIDFromHex(media_id)
 	filter := echo.Map{"_id": id}
-	if err := mongods.FindMedia(filter,&result); err != nil {
-		if err.Error() == "mongo: no documents in result" {
-			c.JSON(http.StatusNotFound, helpers.FailedJsonMessage("Not Found"))
+	if err := app.GetOneMedia(filter, &result); err != nil {
+		if(err.Error() == "Not Found"){
+			c.JSON(http.StatusNotFound, helpers.FailedJsonMessage(err.Error()))
 		}
 		return err
 	}

@@ -2,6 +2,7 @@ package app
 
 import (
 	"bytes"
+	"errors"
 	"fmt"
 	ds "github.com/alaraiabdiallah/media-service/data_sources/mongods"
 	"github.com/alaraiabdiallah/media-service/models"
@@ -73,6 +74,17 @@ func GetAllMedia(filter models.MediaFilter, results *interface{}) error {
 		var medias []models.MediaDS
 		if err := ds.FindAllMedia(filter.Query, &medias); err != nil { return err }
 		*results = medias
+	}
+
+	return nil
+}
+
+func GetOneMedia(filter map[string]interface{}, result *models.MediaDS) error {
+	if err := ds.FindMedia(filter, result); err != nil {
+		if err.Error() == "mongo: no documents in result" {
+			return errors.New("Not Found")
+		}
+		return err
 	}
 
 	return nil
